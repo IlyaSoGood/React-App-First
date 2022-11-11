@@ -17,11 +17,15 @@ class App extends Component {
                 {name: 'Alex. M', salary: 3000, increase: true, rise: false, id: 2},
                 {name: 'Carl W.', salary: 5000, increase: false, rise: false, id: 3}
             ],
-            term: ''
+            term: '',
+            filterRise: false,
+            filterSalary: false
+            // mod: ''
         }
         this.maxId = 4;
     }
 
+    //Add-form
     deleteItem = (id) => {
         this.setState(({data}) => {
             return {
@@ -44,6 +48,7 @@ class App extends Component {
         })
     }
 
+    //List
     onToggleProp = (id, prop) => {
         this.setState(({data}) => ({
             data: data.map(item => {
@@ -55,6 +60,7 @@ class App extends Component {
         }))
     }
 
+    //Search-panel
     searchEmp = (items, term) => {
         if (term.length === 0) {
             return items;
@@ -66,14 +72,63 @@ class App extends Component {
     }
 
     onUpdateSearch = (term) => {
-        this.setState({term});
+        this.setState({
+            term,
+            mod: 'Search'
+        });
+    }
+
+    //App-filter
+    filterRise = (items) => {
+        return items.filter(item => {
+            return item.rise
+        })
+    }
+
+    filterSalary = (items) => {
+        return items.filter(item => {
+            return item.salary > 1000
+        })
+    }
+
+    onToggleFilterRise = () => {
+        if (this.state.filterRise) {return}
+        this.setState({
+            filterRise: !this.state.filterRise,
+            filterSalary: false,
+            mod: 'Rise'
+        })
+    }
+
+    onToggleFilterSalary = () => {
+        if (this.state.filterSalary) {return}
+        this.setState({
+            filterSalary: !this.state.filterSalary,
+            filterRise: false,
+            mod: 'Salary'
+        })
+    }
+
+    onOffFilters = () => {
+        this.setState({
+            filterSalary: false,
+            filterRise: false,
+            mod: 'Off-filter'
+        })
     }
 
     render () {
         const {data, term} = this.state;
         const amountEmployees = this.state.data.length;
         const amountIncreasedEmployees = this.state.data.filter(item => item.increase).length;
-        const visibleVata = this.searchEmp(data, term);
+        // const visibleData = this.state.term ? this.searchEmp(data, term) : 
+        //                                         this.state.filterRise ? this.filterRise(data) : 
+        //                                             this.state.filterSalary ? this.filterSalary(data) : this.state.data;
+
+        const visibleData = (this.state.term && this.searchEmp(data, term)) ||
+                            (this.state.filterRise && this.filterRise(data)) ||
+                            (this.state.filterSalary && this.filterSalary(data)) ||
+                            this.state.data;
 
         return (
             <div className="app">
@@ -81,11 +136,16 @@ class App extends Component {
     
                 <div className="search-panel">
                     <SearchPanel onUpdateSearch={this.onUpdateSearch}/>
-                    <AppFilter/>
+                    <AppFilter 
+                        onToggleFilterRise={this.onToggleFilterRise} 
+                        onToggleFilterSalary={this.onToggleFilterSalary} 
+                        onOffFilters={this.onOffFilters}
+                        buttonRiseActive={this.state.filterRise} 
+                        buttonSalaryActive={this.state.filterSalary}/>
                 </div>
     
                 <EmployeesList 
-                    data={visibleVata} 
+                    data={visibleData} 
                     onDelete={this.deleteItem}
                     onToggleProp={this.onToggleProp}/>
 
@@ -96,3 +156,23 @@ class App extends Component {
 }
 
 export default App;
+
+
+
+// const updatedData = () => {
+//     if (mod === '') {
+//         return this.state.data
+//     }
+//     if (mod === 'Search') {
+//         return this.searchEmp
+//     }
+//     if(mod === 'Rise') {
+//         return this.filterRise
+//     }
+//     if(mod === 'Salary') {
+//         return this.filterSalary
+//     }
+//     if(mod === 'Off-filter') {
+//         return this.state.data
+//     }
+// }
