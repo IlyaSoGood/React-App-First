@@ -90,18 +90,16 @@ class App extends Component {
     }
 
     onToggleFilterRise = () => {
-        if (this.state.filterRise) {return}
         this.setState({
             filterRise: !this.state.filterRise,
-            filterSalary: false
+            // filterSalary: false
         })
     }
 
     onToggleFilterSalary = () => {
-        if (this.state.filterSalary) {return}
         this.setState({
             filterSalary: !this.state.filterSalary,
-            filterRise: false
+            // filterRise: false
         })
     }
 
@@ -119,7 +117,10 @@ class App extends Component {
         // const visibleData = this.state.term ? this.searchEmp(data, term) : 
         //                                         this.state.filterRise ? this.filterRise(data) : 
         //                                             this.state.filterSalary ? this.filterSalary(data) : this.state.data;
-        const filteredData = (this.state.filterRise && this.filterRise(data)) ||
+        const filteredData = (this.state.filterRise && this.state.filterSalary && 
+                                (this.filterRise(this.filterSalary(data)) || this.filterSalary(this.filterRise(data)))) ||
+
+                             (this.state.filterRise && this.filterRise(data)) ||
                              (this.state.filterSalary && this.filterSalary(data)) ||
                              this.state.data
 

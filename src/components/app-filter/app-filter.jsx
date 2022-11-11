@@ -12,12 +12,10 @@ const AppFilter = ({onToggleFilterRise, onToggleFilterSalary, onOffFilters, butt
     if (buttonRiseActive) {
         buttonOffFilter = buttonDisable;
         buttonRiseFilter = buttonActive;
-        buttonSalaryFilter = buttonDisable;
     }
 
     if(buttonSalaryActive) {
         buttonOffFilter = buttonDisable;
-        buttonRiseFilter = buttonDisable;
         buttonSalaryFilter = buttonActive;
     }
 
