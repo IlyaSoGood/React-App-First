@@ -19,8 +19,7 @@ class App extends Component {
             ],
             term: '',
             filterRise: false,
-            filterSalary: false
-            // mod: ''
+            filterSalary: false,
         }
         this.maxId = 4;
     }
@@ -74,7 +73,6 @@ class App extends Component {
     onUpdateSearch = (term) => {
         this.setState({
             term,
-            mod: 'Search'
         });
     }
 
@@ -95,8 +93,7 @@ class App extends Component {
         if (this.state.filterRise) {return}
         this.setState({
             filterRise: !this.state.filterRise,
-            filterSalary: false,
-            mod: 'Rise'
+            filterSalary: false
         })
     }
 
@@ -104,16 +101,14 @@ class App extends Component {
         if (this.state.filterSalary) {return}
         this.setState({
             filterSalary: !this.state.filterSalary,
-            filterRise: false,
-            mod: 'Salary'
+            filterRise: false
         })
     }
 
     onOffFilters = () => {
         this.setState({
             filterSalary: false,
-            filterRise: false,
-            mod: 'Off-filter'
+            filterRise: false
         })
     }
 
@@ -124,11 +119,11 @@ class App extends Component {
         // const visibleData = this.state.term ? this.searchEmp(data, term) : 
         //                                         this.state.filterRise ? this.filterRise(data) : 
         //                                             this.state.filterSalary ? this.filterSalary(data) : this.state.data;
+        const filteredData = (this.state.filterRise && this.filterRise(data)) ||
+                             (this.state.filterSalary && this.filterSalary(data)) ||
+                             this.state.data
 
-        const visibleData = (this.state.term && this.searchEmp(data, term)) ||
-                            (this.state.filterRise && this.filterRise(data)) ||
-                            (this.state.filterSalary && this.filterSalary(data)) ||
-                            this.state.data;
+        const visibleData = this.searchEmp(filteredData, term)
 
         return (
             <div className="app">
@@ -156,23 +151,3 @@ class App extends Component {
 }
 
 export default App;
-
-
-
-// const updatedData = () => {
-//     if (mod === '') {
-//         return this.state.data
-//     }
-//     if (mod === 'Search') {
-//         return this.searchEmp
-//     }
-//     if(mod === 'Rise') {
-//         return this.filterRise
-//     }
-//     if(mod === 'Salary') {
-//         return this.filterSalary
-//     }
-//     if(mod === 'Off-filter') {
-//         return this.state.data
-//     }
-// }
