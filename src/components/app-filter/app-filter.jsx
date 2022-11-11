@@ -1,44 +1,30 @@
 import './app-filter.css';
 
 
-const AppFilter = ({onToggleFilterRise, onToggleFilterSalary, onOffFilters, buttonRiseActive, buttonSalaryActive}) => {
-    let buttonDisable = 'btn btn-outline-light';
-    let buttonActive = 'btn btn-light';
+const AppFilter = (props) => {
+    const buttonsData = [
+        {name: 'all', label: 'Все сотрудники'},
+        {name: 'rise', label: 'На повышение'},
+        {name: 'moreThen1000', label: 'З/П больше 1000$'},
+    ];
 
-    let buttonOffFilter = buttonActive;
-    let buttonRiseFilter = buttonDisable;
-    let buttonSalaryFilter = buttonDisable;
+    const buttons = buttonsData.map(({name, label}) => {
+        const active = props.filter === name;
+        const clazz = active ? 'btn-light' : 'btn-outline-light';
 
-    if (buttonRiseActive) {
-        buttonOffFilter = buttonDisable;
-        buttonRiseFilter = buttonActive;
-    }
-
-    if(buttonSalaryActive) {
-        buttonOffFilter = buttonDisable;
-        buttonSalaryFilter = buttonActive;
-    }
+        return (
+            <button type="button"
+                    className={`btn ${clazz}`}
+                    key={name}
+                    onClick={() => props.onFilterSelect(name)}>
+                    {label}
+            </button>
+        )
+    })
 
     return (
         <div className="btn-group">
-            <button 
-                className={buttonOffFilter}
-                type="button"
-                onClick={onOffFilters}>
-                    Все сотрудники
-            </button>
-            <button 
-                className={buttonRiseFilter}
-                type="button"
-                onClick={onToggleFilterRise}>
-                    На повышение
-            </button>
-            <button 
-                className={buttonSalaryFilter}
-                type="button"
-                onClick={onToggleFilterSalary}>
-                    З/П больше 1000$
-            </button>
+            {buttons}
         </div>
     )
 }
