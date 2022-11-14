@@ -81,14 +81,39 @@ class App extends Component {
             case 'rise': 
                 return items.filter(item => item.rise);
             case 'moreThen1000':
-                    return items.filter(item => item.salary > 1000);
+                return items.filter(item => item.salary > 1000);
+            case 'rise & moreThen1000':
+                return items.filter(item => item.rise).filter(item => item.salary > 1000)
             default: 
                 return items
         }
     }
 
     onFilterSelect = (filter) => {
-        this.setState({filter});
+        if ((this.state.filter === 'rise' || this.state.filter === 'moreThen1000') && filter !== 'all' && this.state.filter !== filter) {
+            this.setState({
+                filter: 'rise & moreThen1000'
+            })
+            return;
+        } if (this.state.filter === filter) {
+            this.setState({
+                filter: 'all'
+            })
+            return
+        } if (this.state.filter === 'rise & moreThen1000' && filter === 'rise') {
+            this.setState({
+                filter: 'moreThen1000'
+            })
+            return
+        } if (this.state.filter === 'rise & moreThen1000' && filter === 'moreThen1000') {
+            this.setState({
+                filter: 'rise'
+            })
+            return
+        }
+        else {
+            this.setState({filter});
+        }
     }
 
     render () {
